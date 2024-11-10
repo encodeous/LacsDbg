@@ -56,13 +56,13 @@ object LacsDbg {
     DebugMachineCode(code5, debugTable)
   }
 
-  /** Given a sequence `codes` of `Code`, generates a table suitable for use by the `Debugger`. The table
+  /** Given a sequence `codes` of `Code`, generates a table suitable for use by the `LacsDbg`. The table
    * associates with each memory address the comments appearing just before the code at that address,
-   * and the labels defined at that address. The `Debugger` uses this table to show labels and comments
+   * and the labels defined at that address. The debugger uses this table to show labels, comments, and pauses on Breakpoints
    * when it traces through the execution of machine language code.
    *
    * Note: this method assumes that the `codes` contain only `CodeWord`, `Define`, `Use`, `BeqBne`,
-   * or `Comment`.
+   * `Comment`, or `Debug`.
    */
   def createAdvancedDebugTable(codes: Seq[Code]): AdvancedDebugTable = {
     val ret = mutable.Map[Word, Seq[DbgSymbol]]()
