@@ -102,13 +102,13 @@ object LacsDbg {
       def printMemory(addr: Long) = {
         require(addr % 4 == 0)
         val memVal = decodeUnsigned(state.mem(Word(encodeSigned(addr))));
-        println("MEM: %10s %s".format(addr, memVal))
+        println("MEM: %08x %08x".format(addr, memVal))
       }
 
       def printRegister(register: Int) = {
         require(0 <= register && register <= 31)
         val regVal = decodeUnsigned(state.reg(register))
-        println("$%2s %s".format(register, regVal))
+        println("$%2s %08x".format(register, regVal))
       }
 
       // if you implement (1), you can use the Chunk offsets to get your parameters & current frame
@@ -137,10 +137,10 @@ object LacsDbg {
           case "h" => println(helpMsg)
           case "r" => printRegister(scanner.nextInt())
           case "dr" => printMemory(decodeUnsigned(state.reg(scanner.nextInt())))
-          case "m" => printMemory(scanner.nextInt())
+          case "m" => printMemory(scanner.nextInt(16))
           case "mr" => {
-            val start = scanner.nextInt()
-            val len = scanner.nextInt()
+            val start = scanner.nextInt(16)
+            val len = scanner.nextInt(16)
             if (start % 4 != 0 || len % 4 != 0) {
               println("Addresses must be multiples of 4")
             }
@@ -183,7 +183,7 @@ object LacsDbg {
           disasmed = "NOP"
         }
 
-        println(s"${"%-6s".format(decodeUnsigned(state.reg(PC)))}${disasmed}")
+        println(s"${"%08x".format(decodeUnsigned(state.reg(PC)))} ${disasmed}")
 
         if (frozen) {
           debugInspector(state)
